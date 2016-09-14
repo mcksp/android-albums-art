@@ -50,8 +50,4 @@ public class LoadingItemModel {
         progressBarVisibility = true;
     }
 
-    public void onStart() {
-        text = "";
-        progressBarVisibility = false;
-    }
 }

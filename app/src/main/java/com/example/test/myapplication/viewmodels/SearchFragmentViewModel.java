@@ -46,12 +46,13 @@ public class SearchFragmentViewModel {
     private boolean internetWorking = true;
     private boolean fetching = false;
 
-    public SearchFragmentViewModel(Context context) {
+    public SearchFragmentViewModel(Context context, String search) {
         initWidgets();
         adapter = new SongsAdapter(songs, loadingItemModel);
         ((TestApp) context.getApplicationContext()).getNetComponent().inject(this);
         initList(context);
-        onStart();
+        searchText.setText(search);
+        fetchSongs();
     }
 
     private void initWidgets() {
@@ -128,11 +129,6 @@ public class SearchFragmentViewModel {
 
     public void loading() {
         loadingItemModel.loading();
-        adapter.notifyItemChanged(loadingItemModel.getPosition());
-    }
-
-    public void onStart() {
-        loadingItemModel.onStart();
         adapter.notifyItemChanged(loadingItemModel.getPosition());
     }
 

@@ -16,23 +16,39 @@ import com.example.test.myapplication.viewmodels.SearchFragmentViewModel;
 
 public class SearchFragment extends Fragment {
 
+    private static final String SEARCH_KEY = "SEARCH_KEY";
     private SearchFragmentViewModel viewModel;
+
+    public static SearchFragment newInstance(String search) {
+
+        Bundle args = new Bundle();
+        args.putString(SEARCH_KEY, search);
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setViewModel();
+
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentSearchBinding binding = FragmentSearchBinding.inflate(getLayoutInflater(savedInstanceState),container,false);
+        FragmentSearchBinding binding = FragmentSearchBinding.inflate(getLayoutInflater(savedInstanceState), container, false);
+        String search = "";
+        if (getArguments() != null && getArguments().containsKey(SEARCH_KEY)) {
+            search = getArguments().getString(SEARCH_KEY);
+        }
+        setViewModel(search);
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
-    private void setViewModel() {
-        viewModel = new SearchFragmentViewModel(getContext());
+    private void setViewModel(String search) {
+        viewModel = new SearchFragmentViewModel(getContext(), search);
     }
 }

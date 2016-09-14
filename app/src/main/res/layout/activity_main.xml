@@ -4,12 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/main_fragment"
-        android:name="com.example.test.myapplication.fragments.BrowseAlbumsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:tag="main_fragment" />
 
 </FrameLayout>
 

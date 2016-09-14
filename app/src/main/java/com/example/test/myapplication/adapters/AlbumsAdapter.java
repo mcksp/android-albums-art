@@ -17,9 +17,11 @@ import java.util.ArrayList;
  */
 public class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Album> albums;
+    private OnAlbumClick onAlbumClick;
 
-    public AlbumsAdapter(ArrayList<Album> albums) {
+    public AlbumsAdapter(ArrayList<Album> albums, OnAlbumClick onAlbumClick) {
         this.albums = albums;
+        this.onAlbumClick = onAlbumClick;
     }
 
     public ArrayList<Album> getAlbums() {
@@ -40,6 +42,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Album album = albums.get(position);
         ((AlbumViewHolder) holder).getBinding().setViewModel(album);
         ((AlbumViewHolder) holder).getBinding().executePendingBindings();
+        ((AlbumViewHolder) holder).getBinding().getRoot().setOnClickListener(v -> onAlbumClick.onAlbumClicked(album.id));
 
     }
 
@@ -59,5 +62,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public AlbumItemBinding getBinding() {
             return binding;
         }
+    }
+
+    public static interface OnAlbumClick {
+        public void onAlbumClicked(long id);
     }
 }

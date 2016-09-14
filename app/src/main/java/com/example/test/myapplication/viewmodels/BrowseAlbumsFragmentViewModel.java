@@ -18,9 +18,9 @@ public class BrowseAlbumsFragmentViewModel {
     private AlbumsAdapter adapter;
     private ArrayList<Album> albums = new ArrayList<>();
 
-    public BrowseAlbumsFragmentViewModel(Context context, ArrayList<Album> albums) {
+    public BrowseAlbumsFragmentViewModel(Context context, ArrayList<Album> albums, AlbumsAdapter.OnAlbumClick onAlbumClick) {
         this.albums = albums;
-        adapter = new AlbumsAdapter(this.albums);
+        adapter = new AlbumsAdapter(this.albums, onAlbumClick);
         initList(context);
     }
 

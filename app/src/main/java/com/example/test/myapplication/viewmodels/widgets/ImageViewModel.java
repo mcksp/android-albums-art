@@ -17,7 +17,7 @@ public class ImageViewModel extends BaseViewModel {
     public static void loadImage(ImageView imageView, String imageUrl){
         Picasso.with(imageView.getContext())
                 .load(imageUrl)
-                .placeholder(R.mipmap.ic_launcher)
+              //  .placeholder(R.mipmap.ic_launcher)
                 .into(imageView);
     }
 }
