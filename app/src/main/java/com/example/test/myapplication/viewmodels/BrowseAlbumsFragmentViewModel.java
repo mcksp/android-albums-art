@@ -1,7 +1,7 @@
 package com.example.test.myapplication.viewmodels;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 
 import com.example.test.myapplication.adapters.AlbumsAdapter;
 import com.example.test.myapplication.models.Album;
@@ -28,7 +28,7 @@ public class BrowseAlbumsFragmentViewModel {
     private void initList(Context context) {
         recyclerView = new RecyclerViewModel();
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 1));
         recyclerView.setFixedSize(true);
     }
 

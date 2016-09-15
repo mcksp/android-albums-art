@@ -13,46 +13,57 @@
 
     </data>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="@dimen/album_photo_size"
-            android:layout_height="@dimen/album_photo_size"
-            app:imageUrl="@{viewModel.albumArt}"/>
+        android:layout_margin="@dimen/small_margin"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
+            android:layout_gravity="top"
+            android:background="#565656"
             android:orientation="vertical">
 
+            <com.example.test.myapplication.widgets.SquareImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:imageUrl="@{viewModel.albumArt}" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:layout_marginRight="@dimen/small_margin"
+                android:layout_marginTop="@dimen/small_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{viewModel.title}" />
+                android:text="@{viewModel.title}"
+                android:textColor="#dedede"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:layout_marginRight="@dimen/small_margin"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{viewModel.author}"
+                android:textColor="#dedede"
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{viewModel.author}" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="5"
-                android:text="@{viewModel.year}" />
+                android:text="@{viewModel.year}"
+                android:visibility="gone" />
 
         </LinearLayout>
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 </layout>
