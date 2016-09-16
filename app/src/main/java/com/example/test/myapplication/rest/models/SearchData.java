@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SearchData {
-    @SerializedName("tracks")
+    @SerializedName("albums")
     @Expose
-    public Tracks tracks;
+    public Items data;
 }

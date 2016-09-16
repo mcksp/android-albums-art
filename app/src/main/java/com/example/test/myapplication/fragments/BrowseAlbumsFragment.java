@@ -25,6 +25,7 @@ import java.util.ArrayList;
  * Created by maciej on 14.09.16.
  */
 public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAlbumClick {
+    public static final String TAG = BrowseAlbumsFragment.class.getSimpleName();
 
     private BrowseAlbumsFragmentViewModel viewModel;
     private ArrayList<Album> albums = new ArrayList<>();
@@ -92,7 +93,7 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(fragment.TAG);
 
         transaction.commit();
 

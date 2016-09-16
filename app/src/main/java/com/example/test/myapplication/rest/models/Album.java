@@ -12,12 +12,9 @@ import java.util.List;
 
 public class Album {
 
-    @SerializedName("id")
-    @Expose
-    public String id;
     @SerializedName("images")
     @Expose
-    public List<Image> images = new ArrayList<>();
+    public List<Image> images = new ArrayList<Image>();
     @SerializedName("name")
     @Expose
     public String name;
@@ -27,7 +24,6 @@ public class Album {
     @SerializedName("uri")
     @Expose
     public String uri;
-
     public String getImageUrl(){
         return images.get(1).url;
     }

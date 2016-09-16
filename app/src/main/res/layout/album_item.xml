@@ -23,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:background="#565656"
             android:orientation="vertical">
 
             <com.example.test.myapplication.widgets.SquareImageView
@@ -41,7 +40,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.title}"
-                android:textColor="#dedede"
                 android:textSize="14sp" />
 
             <TextView
@@ -53,7 +51,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.author}"
-                android:textColor="#dedede"
                 android:textSize="14sp" />
 
             <TextView

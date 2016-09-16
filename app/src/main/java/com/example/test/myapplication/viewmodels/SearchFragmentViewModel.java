@@ -3,9 +3,11 @@ package com.example.test.myapplication.viewmodels;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.test.myapplication.TestApp;
-import com.example.test.myapplication.adapters.SongsAdapter;
+import com.example.test.myapplication.adapters.AlbumsAdapter;
+import com.example.test.myapplication.models.Album;
 import com.example.test.myapplication.models.LoadingItemModel;
 import com.example.test.myapplication.rest.ApiService;
 import com.example.test.myapplication.rest.models.SearchData;
@@ -34,21 +36,23 @@ public class SearchFragmentViewModel {
     public static final int ITEMS_PER_PAGE = 20;
     private int lastItemPos = 0;
 
-    private ArrayList<Song> songs = new ArrayList<>();
+    private ArrayList<Album> albums = new ArrayList<>();
+    private ArrayList<Album> tempAlbums = new ArrayList<>();
 
     public EditTextViewModel searchText;
     public ButtonViewModel searchButton;
     public RecyclerViewModel recyclerView;
-    public LoadingItemModel loadingItemModel = new LoadingItemModel("Loading more items...", true);
 
-    public SongsAdapter adapter;
+    public AlbumsAdapter adapter;
 
     private boolean internetWorking = true;
     private boolean fetching = false;
 
     public SearchFragmentViewModel(Context context, String search) {
         initWidgets();
-        adapter = new SongsAdapter(songs, loadingItemModel);
+        adapter = new AlbumsAdapter(albums, e -> {
+            Toast.makeText(context, "siema", Toast.LENGTH_LONG).show();
+        });
         ((TestApp) context.getApplicationContext()).getNetComponent().inject(this);
         initList(context);
         searchText.setText(search);
@@ -84,7 +88,7 @@ public class SearchFragmentViewModel {
         if (searchText.text.length() > 0) {
             internetWorking = true;
             lastItemPos = 0;
-            songs.clear();
+            albums.clear();
             adapter.notifyDataSetChanged();
             fetchSongs();
         }
@@ -94,7 +98,7 @@ public class SearchFragmentViewModel {
         if (internetWorking && !fetching) {
             fetching = true;
             loading();
-            Observable<SearchData> tracksObservable = apiService.getSongs(searchText.getText(), "track", ITEMS_PER_PAGE, lastItemPos);
+            Observable<SearchData> tracksObservable = apiService.getSongs(searchText.getText(), "album", ITEMS_PER_PAGE, lastItemPos);
             tracksObservable.subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError(throwable -> {
@@ -104,11 +108,16 @@ public class SearchFragmentViewModel {
                     })
                     .onErrorResumeNext(throwable1 -> Observable.empty())
                     .subscribe(data -> {
-                        if (data != null && data.tracks != null && data.tracks.songs != null) {
-                            songs.addAll(data.tracks.songs);
+                        if (data != null && data.data != null && data.data.albums != null) {
+                            tempAlbums.clear();
+                            for (com.example.test.myapplication.rest.models.Album album : data.data.albums) {
+                                Album a = new Album(album.name, album.type, album.uri, album.getImageUrl(), 0);
+                                albums.add(a);
+                            }
+
                             adapter.notifyDataSetChanged();
-                            lastItemPos = songs.size();
-                            if (data.tracks.songs.size() < ITEMS_PER_PAGE) {
+                            lastItemPos = albums.size();
+                            if (data.data.albums.size() < ITEMS_PER_PAGE) {
                                 allFetched();
                             }
                         }
@@ -118,21 +127,15 @@ public class SearchFragmentViewModel {
     }
 
     public void allFetched() {
-        loadingItemModel.allFetched();
-        adapter.notifyItemChanged(loadingItemModel.getPosition());
     }
 
     public void onError() {
-        loadingItemModel.onError();
-        adapter.notifyItemChanged(loadingItemModel.getPosition());
     }
 
     public void loading() {
-        loadingItemModel.loading();
-        adapter.notifyItemChanged(loadingItemModel.getPosition());
     }
 
-    public ArrayList<Song> getSongs() {
-        return songs;
+    public ArrayList<Album> getAlbums() {
+        return albums;
     }
 }

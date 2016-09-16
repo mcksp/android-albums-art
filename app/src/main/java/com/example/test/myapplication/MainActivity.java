@@ -13,12 +13,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, new BrowseAlbumsFragment());
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, new BrowseAlbumsFragment());
+            transaction.commit();
+        }
 
     }
 

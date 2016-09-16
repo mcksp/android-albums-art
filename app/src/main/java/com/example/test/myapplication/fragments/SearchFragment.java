@@ -16,12 +16,16 @@ import com.example.test.myapplication.viewmodels.SearchFragmentViewModel;
 
 public class SearchFragment extends Fragment {
 
+    public static final String TAG = SearchFragment.class.getSimpleName();
+
+
     private static final String SEARCH_KEY = "SEARCH_KEY";
     private SearchFragmentViewModel viewModel;
 
     public static SearchFragment newInstance(String search) {
 
         Bundle args = new Bundle();
+        search = formatString(search);
         args.putString(SEARCH_KEY, search);
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);
@@ -50,5 +54,12 @@ public class SearchFragment extends Fragment {
 
     private void setViewModel(String search) {
         viewModel = new SearchFragmentViewModel(getContext(), search);
+    }
+
+    private static String formatString(String str) {
+        str = str.replaceAll("\\(.*?\\) ?", "");
+        str = str.replaceAll("\\[.*?\\] ?", "");
+        str = str.replaceAll("\\<.*?\\> ?", "");
+        return str.trim();
     }
 }
