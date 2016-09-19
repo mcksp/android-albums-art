@@ -1,14 +1,19 @@
 package com.example.test.myapplication.fragments;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +24,10 @@ import com.example.test.myapplication.databinding.FragmentBrowseAlbumsBinding;
 import com.example.test.myapplication.models.Album;
 import com.example.test.myapplication.viewmodels.BrowseAlbumsFragmentViewModel;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by maciej on 14.09.16.
@@ -72,6 +80,7 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
         final String albumArt = MediaStore.Audio.Albums.ALBUM_ART;
         final String songsNumber = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
         final String year = MediaStore.Audio.Albums.FIRST_YEAR;
+        final String xddd = MediaStore.Audio.Albums.FIRST_YEAR;
         final String[] columns = {_id, album_name, artist, albumArt, songsNumber, year, _id};
         return cr.query(uri, columns, where, null, null);
     }
@@ -87,7 +96,42 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
             }
         }
 
-        SearchFragment fragment = SearchFragment.newInstance(album.title);
+
+        Uri albumArtUri = Uri.parse("content://media/external/audio/albumart");
+
+        int lol = getContext().getContentResolver().delete(ContentUris.withAppendedId(albumArtUri, album.id), null, null);
+        Log.d("DELETED", String.valueOf(lol));
+
+
+        String filename = Environment.getExternalStorageDirectory().getPath() + "/albumthumbs/" + Long.toString(Calendar.getInstance().getTimeInMillis());
+        Bitmap bmp = BitmapFactory.decodeResource(getContext().getResources(),
+                R.mipmap.ic_launcher);
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(filename);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ContentValues values = new ContentValues();
+        values.put("album_id", album.id);
+        values.put("_data", filename);
+        Uri num_updates = getContext().getContentResolver().insert(albumArtUri, values);
+
+
+
+
+       /* SearchFragment fragment = SearchFragment.newInstance(album.title, album.albumArt);
 
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -95,7 +139,7 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(fragment.TAG);
 
-        transaction.commit();
+        transaction.commit();*/
 
 
     }

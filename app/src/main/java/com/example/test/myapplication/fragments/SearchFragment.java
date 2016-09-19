@@ -20,13 +20,17 @@ public class SearchFragment extends Fragment {
 
 
     private static final String SEARCH_KEY = "SEARCH_KEY";
+    private static final String PATH_KEY = "PATH_KEY";
     private SearchFragmentViewModel viewModel;
 
-    public static SearchFragment newInstance(String search) {
+    String path;
+
+    public static SearchFragment newInstance(String search, String path) {
 
         Bundle args = new Bundle();
         search = formatString(search);
         args.putString(SEARCH_KEY, search);
+        args.putString(PATH_KEY, path);
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);
         return fragment;
@@ -46,6 +50,7 @@ public class SearchFragment extends Fragment {
         String search = "";
         if (getArguments() != null && getArguments().containsKey(SEARCH_KEY)) {
             search = getArguments().getString(SEARCH_KEY);
+            path = getArguments().getString(PATH_KEY);
         }
         setViewModel(search);
         binding.setViewModel(viewModel);
