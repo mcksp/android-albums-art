@@ -3,15 +3,12 @@ package com.example.test.myapplication.viewmodels;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.example.test.myapplication.TestApp;
 import com.example.test.myapplication.adapters.AlbumsAdapter;
 import com.example.test.myapplication.models.Album;
-import com.example.test.myapplication.models.LoadingItemModel;
 import com.example.test.myapplication.rest.ApiService;
 import com.example.test.myapplication.rest.models.SearchData;
-import com.example.test.myapplication.rest.models.Song;
 import com.example.test.myapplication.viewmodels.widgets.ButtonViewModel;
 import com.example.test.myapplication.viewmodels.widgets.EditTextViewModel;
 import com.example.test.myapplication.viewmodels.widgets.RecyclerViewModel;
@@ -37,7 +34,6 @@ public class SearchFragmentViewModel {
     private int lastItemPos = 0;
 
     private ArrayList<Album> albums = new ArrayList<>();
-    private ArrayList<Album> tempAlbums = new ArrayList<>();
 
     public EditTextViewModel searchText;
     public ButtonViewModel searchButton;
@@ -47,15 +43,15 @@ public class SearchFragmentViewModel {
 
     private boolean internetWorking = true;
     private boolean fetching = false;
+    private Album album;
 
-    public SearchFragmentViewModel(Context context, String search) {
+    public SearchFragmentViewModel(Context context, Album album, AlbumsAdapter.OnAlbumClick onAlbumClick) {
         initWidgets();
-        adapter = new AlbumsAdapter(albums, e -> {
-            Toast.makeText(context, "siema", Toast.LENGTH_LONG).show();
-        });
+        this.album = album;
+        adapter = new AlbumsAdapter(albums, onAlbumClick);
         ((TestApp) context.getApplicationContext()).getNetComponent().inject(this);
         initList(context);
-        searchText.setText(search);
+        searchText.setText(formatString(album.title));
         fetchSongs();
     }
 
@@ -109,9 +105,8 @@ public class SearchFragmentViewModel {
                     .onErrorResumeNext(throwable1 -> Observable.empty())
                     .subscribe(data -> {
                         if (data != null && data.data != null && data.data.albums != null) {
-                            tempAlbums.clear();
                             for (com.example.test.myapplication.rest.models.Album album : data.data.albums) {
-                                Album a = new Album(album.name, album.type, album.uri, album.getImageUrl(), 0);
+                                Album a = new Album(album.name, album.type, album.uri, album.getImageUrl(), albums.size());
                                 albums.add(a);
                             }
 
@@ -133,6 +128,13 @@ public class SearchFragmentViewModel {
     }
 
     public void loading() {
+    }
+
+    private static String formatString(String str) {
+        str = str.replaceAll("\\(.*?\\) ?", "");
+        str = str.replaceAll("\\[.*?\\] ?", "");
+        str = str.replaceAll("\\<.*?\\> ?", "");
+        return str.trim();
     }
 
     public ArrayList<Album> getAlbums() {

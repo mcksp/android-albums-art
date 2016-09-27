@@ -32,10 +32,8 @@ public class AutoSpanRecyclerView extends RecyclerView {
     protected void onMeasure(int widthSpec, int heightSpec) {
         super.onMeasure(widthSpec, heightSpec);
         int columnWidth = 220;
-        if (columnWidth > 0) {
-            int spanCount = Math.max(1, getMeasuredWidth() / columnWidth);
-            manager.setSpanCount(spanCount);
-        }
+        int spanCount = Math.max(1, getMeasuredWidth() / columnWidth);
+        manager.setSpanCount(spanCount);
     }
 
     private void init(Context context) {

@@ -24,8 +24,9 @@ public class Album {
     @SerializedName("uri")
     @Expose
     public String uri;
-    public String getImageUrl(){
-        return images.get(1).url;
+
+    public String getImageUrl() {
+        return images.size() > 1 ? images.get(1).url : "empty path";
     }
 
 }

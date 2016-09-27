@@ -32,5 +32,9 @@ public class BrowseAlbumsFragmentViewModel {
         recyclerView.setFixedSize(true);
     }
 
+    public void notifyAdapter(){
+        adapter.notifyDataSetChanged();
+    }
+
 
 }
