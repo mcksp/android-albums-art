@@ -11,6 +11,7 @@ public class Album implements Parcelable {
     public String author;
     public String year;
     public String albumArt;
+    public String bigAlbumArt;
     public long id;
 
     public Album(String title, String author, String year, String albumArt, long id) {
@@ -18,6 +19,15 @@ public class Album implements Parcelable {
         this.author = author;
         this.year = year;
         this.albumArt = albumArt;
+        this.id = id;
+    }
+
+    public Album(String title, String author, String year, String albumArt, String bigAlbumArt, long id) {
+        this.title = title;
+        this.author = author;
+        this.year = year;
+        this.albumArt = albumArt;
+        this.bigAlbumArt = bigAlbumArt;
         this.id = id;
     }
 

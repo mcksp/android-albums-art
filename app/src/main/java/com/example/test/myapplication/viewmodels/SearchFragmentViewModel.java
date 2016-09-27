@@ -8,6 +8,7 @@ import com.example.test.myapplication.TestApp;
 import com.example.test.myapplication.adapters.AlbumsAdapter;
 import com.example.test.myapplication.models.Album;
 import com.example.test.myapplication.rest.ApiService;
+import com.example.test.myapplication.rest.models.Record;
 import com.example.test.myapplication.rest.models.SearchData;
 import com.example.test.myapplication.viewmodels.widgets.ButtonViewModel;
 import com.example.test.myapplication.viewmodels.widgets.EditTextViewModel;
@@ -104,15 +105,15 @@ public class SearchFragmentViewModel {
                     })
                     .onErrorResumeNext(throwable1 -> Observable.empty())
                     .subscribe(data -> {
-                        if (data != null && data.data != null && data.data.albums != null) {
-                            for (com.example.test.myapplication.rest.models.Album album : data.data.albums) {
-                                Album a = new Album(album.name, album.type, album.uri, album.getImageUrl(), albums.size());
+                        if (data != null && data.data != null && data.data.records != null) {
+                            for (Record album : data.data.records) {
+                                Album a = new Album(album.name, album.type, album.uri, album.getImageUrl(), album.getBigImageUrl(), albums.size());
                                 albums.add(a);
                             }
 
                             adapter.notifyDataSetChanged();
                             lastItemPos = albums.size();
-                            if (data.data.albums.size() < ITEMS_PER_PAGE) {
+                            if (data.data.records.size() < ITEMS_PER_PAGE) {
                                 allFetched();
                             }
                         }

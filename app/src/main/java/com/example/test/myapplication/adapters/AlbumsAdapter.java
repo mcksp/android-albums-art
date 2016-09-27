@@ -42,7 +42,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Album album = albums.get(position);
         ((AlbumViewHolder) holder).getBinding().setViewModel(album);
         ((AlbumViewHolder) holder).getBinding().executePendingBindings();
-        ((AlbumViewHolder) holder).getBinding().getRoot().setOnClickListener(v -> onAlbumClick.onAlbumClicked(album.id));
+        ((AlbumViewHolder) holder).getBinding().getRoot().setOnClickListener(v -> onAlbumClick.onAlbumClicked(album));
 
     }
 
@@ -64,7 +64,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public static interface OnAlbumClick {
-        public void onAlbumClicked(long id);
+    public interface OnAlbumClick {
+        void onAlbumClicked(Album album);
     }
 }

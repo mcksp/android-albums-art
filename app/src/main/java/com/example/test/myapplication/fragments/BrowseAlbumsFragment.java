@@ -1,9 +1,6 @@
 package com.example.test.myapplication.fragments;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -13,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.test.myapplication.DatabaseHelper;
 import com.example.test.myapplication.R;
 import com.example.test.myapplication.adapters.AlbumsAdapter;
 import com.example.test.myapplication.databinding.FragmentBrowseAlbumsBinding;
@@ -34,7 +32,30 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Cursor cursor = getAlbumsCursor(getContext());
+        readAlbumsData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshChoosedAlbum();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        FragmentBrowseAlbumsBinding binding = FragmentBrowseAlbumsBinding.inflate(getLayoutInflater(savedInstanceState), container, false);
+        setViewModel();
+        binding.setViewModel(viewModel);
+        return binding.getRoot();
+    }
+
+    private void readAlbumsData() {
+        Cursor cursor = DatabaseHelper.getAlbumsCursor(getContext());
+        saveAlbumsToArray(cursor);
+    }
+
+    private void saveAlbumsToArray(Cursor cursor) {
         if (cursor.moveToFirst()) {
             do {
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
@@ -47,64 +68,24 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void refreshChoosedAlbum() {
         if (choosedAlbum != null) {
-            Cursor cursor = getAlbumsCursor(getContext(), choosedAlbum.id);
+            Cursor cursor = DatabaseHelper.getAlbumsCursor(getContext(), choosedAlbum.id);
             if (cursor.moveToFirst()) {
-                do {
-                    String albumArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                    choosedAlbum.albumArt = "file://" + albumArt;
-                    viewModel.notifyAdapter();
-                } while (cursor.moveToNext());
+                String albumArt = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                choosedAlbum.albumArt = "file://" + albumArt;
+                viewModel.notifyAdapter();
             }
         }
         choosedAlbum = null;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentBrowseAlbumsBinding binding = FragmentBrowseAlbumsBinding.inflate(getLayoutInflater(savedInstanceState), container, false);
-        setViewModel();
-        binding.setViewModel(viewModel);
-        return binding.getRoot();
     }
 
     private void setViewModel() {
         viewModel = new BrowseAlbumsFragmentViewModel(getContext(), albums, this);
     }
 
-    public Cursor getAlbumsCursor(Context context) {
-        return getAlbumsCursor(context, -1);
-    }
-
-    public Cursor getAlbumsCursor(Context context, long id) {
-        String where = null;
-        if (id != -1) {
-            where = MediaStore.Audio.Albums._ID + " = " + Long.toString(id);
-        }
-        ContentResolver cr = context.getContentResolver();
-        final Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
-        final String _id = MediaStore.Audio.Albums._ID;
-        final String album_name = MediaStore.Audio.Albums.ALBUM;
-        final String artist = MediaStore.Audio.Albums.ARTIST;
-        final String albumArt = MediaStore.Audio.Albums.ALBUM_ART;
-        final String[] columns = {_id, album_name, artist, albumArt};
-        return cr.query(uri, columns, where, null, null);
-    }
-
     @Override
-    public void onAlbumClicked(long id) {
-        Album album = null;
-
-        for (Album i : albums) {
-            if (i.id == id) {
-                album = i;
-                break;
-            }
-        }
+    public void onAlbumClicked(Album album) {
         choosedAlbum = album;
 
         SearchFragment fragment = SearchFragment.newInstance(album);
@@ -113,6 +94,4 @@ public class BrowseAlbumsFragment extends Fragment implements AlbumsAdapter.OnAl
         transaction.addToBackStack(SearchFragment.TAG);
         transaction.commit();
     }
-
-
 }

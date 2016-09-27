@@ -13,5 +13,5 @@ import java.util.List;
 public class Items {
     @SerializedName("items")
     @Expose
-    public List<Album> albums = new ArrayList<>();
+    public List<Record> records = new ArrayList<>();
 }
