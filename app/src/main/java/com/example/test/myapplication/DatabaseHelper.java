@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.example.test.myapplication.models.Album;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
@@ -29,11 +30,16 @@ public class DatabaseHelper {
         Log.d("DELETED", String.valueOf(lol));
 
 
-        String filename = Environment.getExternalStorageDirectory().getPath() + "/albumthumbs/" + Long.toString(Calendar.getInstance().getTimeInMillis());
-
+        String dirName = Environment.getExternalStorageDirectory().getPath() + "/albumthumbs/";
+        String filename = dirName + Long.toString(Calendar.getInstance().getTimeInMillis());
+        File dir = new File(dirName);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(filename);
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(filename);
+            out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             e.printStackTrace();

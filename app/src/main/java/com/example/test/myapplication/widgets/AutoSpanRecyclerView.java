@@ -6,6 +6,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.example.test.myapplication.WidgetHelper;
+
 /**
  * Created by maciej on 15.09.16.
  */
@@ -31,7 +33,7 @@ public class AutoSpanRecyclerView extends RecyclerView {
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
         super.onMeasure(widthSpec, heightSpec);
-        int columnWidth = 220;
+        int columnWidth = (int) WidgetHelper.dpToPixel(160, getContext());
         int spanCount = Math.max(1, getMeasuredWidth() / columnWidth);
         manager.setSpanCount(spanCount);
     }

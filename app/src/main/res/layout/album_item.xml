@@ -34,23 +34,26 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/small_margin"
-                android:layout_marginRight="@dimen/small_margin"
-                android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginLeft="@dimen/medium_margin"
+                android:layout_marginRight="@dimen/medium_margin"
+                android:layout_marginTop="12dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.title}"
-                android:textSize="14sp" />
+                android:textColor="#DC000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin"
-                android:layout_marginLeft="@dimen/small_margin"
-                android:layout_marginRight="@dimen/small_margin"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="@dimen/medium_margin"
+                android:layout_marginRight="@dimen/medium_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{viewModel.author}"
+                android:textColor="#8C000000"
                 android:textSize="14sp" />
 
             <TextView
@@ -59,7 +62,7 @@
                 android:ellipsize="end"
                 android:maxLines="5"
                 android:text="@{viewModel.year}"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
